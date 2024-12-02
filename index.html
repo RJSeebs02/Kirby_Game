@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kirby Maze Game - Main Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Russo+One&display=swap" rel="stylesheet">
     <style>
+        * {
+            font-family: "Russo One", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
         body {
             margin: 0;
             padding: 0;
@@ -23,23 +31,28 @@
         h1 {
             font-size: 50px;
             margin-bottom: 30px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-            color: pink;
+            color: rgb(255, 255, 255);
+            text-shadow: 
+                2px 2px 0 #000000, 
+                -2px 2px 0 #000000, 
+                2px -2px 0 #000000, 
+                -2px -2px 0 #000000;
         }
         button {
-            font-size: 20px;
+            font-size: 25px;
             padding: 15px 30px;
             margin: 10px;
-            border: none;
+            border: 2px solid black;
             border-radius: 10px;
             cursor: pointer;
-            background-color: rgb(82, 5, 117);
-            color: white;
+            background-color: rgb(255, 255, 255);
+            color: rgb(0, 0, 0);
             transition: all 0.3s ease;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
         }
         button:hover {
             background-color: #FF4B4B;
+            color: white;
         }
         .container {
             max-width: 600px;
@@ -48,9 +61,18 @@
             padding: 20px;
             border: 2px solid #ccc;
             border-radius: 10px;
-            background-color: #0696a0;
+            background-image: url('img/yellow.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            gap: 10px; /* Add spacing between buttons */
         }
+        .container h1 {
+            padding-bottom: 50px;
+        }
+
         #logo{
             margin-top: 60px;
             position: absolute;
@@ -99,8 +121,6 @@
             <source src="bgm/bgm.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-        <div id="bgkirby"></div>
-        <div id="logo"></div>
     </div>
 </body>
 </html>
