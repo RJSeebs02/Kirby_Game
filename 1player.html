@@ -29,18 +29,15 @@
         }
         canvas {
             border: 2px solid #FFF;
-            background-image: url('img/bg4.png');
+            background-image: url('img/grass.png');
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
             background-position: center;
         }
         #message {
-            position: absolute;
-            top: 80px;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 24px;
-            color: rgb(234, 117, 250);
+            font-size: 30px;
+            color: rgb(0, 0, 0);
             font-weight: bold;
         }
         #logo{
@@ -55,11 +52,6 @@
             margin: 20px 200px 20px 20px;
             animation: logoMove 3s infinite;
         }
-        @keyframes logoMove {
-            0% { top: 0px; }
-            50% { top: 30px; }
-            100% { top: 0px; }
-        }
         #bgkirby{
             margin-top: 500px;
             position: absolute;
@@ -73,31 +65,62 @@
             animation: kirbyMove 3s infinite;
             z-index: -5;
         }
-        @keyframes kirbyMove {
-            0% { left: 30px; top: 500px; opacity: 0;}
-            10% { opacity: 1;}
-            50% { top: 580px;}
-            90% { opacity: 1;}
-            100% { left: 1400px; top: 500px; opacity: 0;}
+        #controls-container {
+            position: absolute;
+            top: -50px;
+            right: 10px;
+            z-index: 10; /* Ensure it appears above other elements */
+            background-color: rgba(255, 255, 255, 0.8); /* Optional: translucent background */
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #controls-container button {
+            margin: 5px 0;
+            font-size: 25px;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+        #controls-container button:hover {
+            background-color: #FF4B4B;
+            color: white;
+        }
+        canvas {
+            margin: 25px;
+        }
+        #score-container {
+            position: absolute;
+            top: -50px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 20px;
+            z-index: 100; /* Ensures it is above other elements */
         }
     </style>
 </head>
 <body>
 
     <div id="container">
-        <canvas id="gameCanvas" width="600" height="800"></canvas>
+        <canvas id="gameCanvas" width="1700" height="800"></canvas>
+        
+    </div>
+    <div id="score-container">
         <div id="message"></div>
     </div>
-    <div id="bgkirby"></div>
-    <div id="logo"></div>
     <audio id="bgm" autoplay loop>
         <source src="bgm/bgm.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
-    <button id="resetButton">Restart Game</button>
-    <button onclick="window.location.href='index.html'">Main Menu</button>
+    
+    <div id="controls-container">
+        <button id="resetButton">Restart Game</button>
+        <button onclick="window.location.href='index.html'">Main Menu</button>
 
-    <button id="nextLevelButton" style="display: none;">Next Level</button>
+        <button id="nextLevelButton" style="display: none;">Next Level</button>
+    <div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -105,6 +128,7 @@
         const message = document.getElementById('message');
         const resetButton = document.getElementById('resetButton');
         const nextLevelButton = document.getElementById('nextLevelButton');
+        message.textContent = 'Score: 0';
 
         resetButton.addEventListener('click', function() {
             player1.x = 50;
@@ -137,22 +161,22 @@
             { x: 0, y: 0, width: 600, height: 1 },
             { x: 0, y: 0, width: 1, height: 150 },
             { x: 600, y: 0, width: 1, height: 150 },
-            { x: 0, y: 150, width: 250, height: 10 },
-            { x: 350, y: 150, width: 250, height: 10 },
-            { x: 250, y: 150, width: 10, height: 150 },
-            { x: 350, y: 150, width: 10, height: 150 },
-            { x: 350, y: 300, width: 180, height: 10 },
-            { x: 70, y: 300, width: 190, height: 10 },
-            { x: 150, y: 380, width: 300, height: 10 },
-            { x: 150, y: 390, width: 10, height: 250 },
-            { x: 70, y: 300, width: 10, height: 420 },
-            { x: 520, y: 300, width: 10, height: 420 },
-            { x: 440, y: 390, width: 10, height: 250 },
-            { x: 150, y: 640, width: 300, height: 10},
-            { x: 70, y: 720, width: 190, height: 10},
-            { x: 350, y: 720, width: 180, height: 10},
-            { x: 250, y: 720, width: 10, height: 90},
-            { x: 350, y: 720, width: 10, height: 90},
+            { x: 0, y: 150, width: 250, height: 20 },
+            { x: 350, y: 150, width: 250, height: 20 },
+            { x: 250, y: 150, width: 20, height: 150 },
+            { x: 350, y: 150, width: 20, height: 150 },
+            { x: 350, y: 300, width: 180, height: 20 },
+            { x: 70, y: 300, width: 190, height: 20 },
+            { x: 150, y: 380, width: 300, height: 20 },
+            { x: 150, y: 390, width: 20, height: 250 },
+            { x: 70, y: 300, width: 20, height: 420 },
+            { x: 520, y: 300, width: 20, height: 420 },
+            { x: 440, y: 390, width: 20, height: 250 },
+            { x: 150, y: 640, width: 300, height: 20},
+            { x: 70, y: 720, width: 190, height: 20},
+            { x: 350, y: 720, width: 180, height: 20},
+            { x: 250, y: 720, width: 20, height: 90},
+            { x: 350, y: 720, width: 20, height: 90},
         ];
 
         const finishLine = {
@@ -207,12 +231,37 @@
             ctx.drawImage(image, player.x, player.y, player.width, player.height);
         }
 
+        // Load the rock texture image globally
+        const rockTexture = new Image();
+        rockTexture.src = 'img/rock.jpg'; // Path to your texture image
+
+        // Ensure the texture image is loaded before using it
+        rockTexture.onload = () => {
+            drawPlayers(); // Initial drawing after the texture is ready
+        };
+
         function drawWalls() {
-            ctx.fillStyle = '#8BF2FF';
+            // Create the pattern using the preloaded rock texture
+            const pattern = ctx.createPattern(rockTexture, 'repeat');
+            ctx.fillStyle = pattern;
+
+            // Draw each wall
             for (const wall of walls) {
                 ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
             }
         }
+
+        function drawWalls() {
+            // Create the pattern using the preloaded rock texture
+            const pattern = ctx.createPattern(rockTexture, 'repeat');
+            ctx.fillStyle = pattern;
+
+            // Draw each wall
+            for (const wall of walls) {
+                ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+            }
+        }
+
 
         function drawFinishLine() {
             ctx.fillStyle = finishLine.color;
