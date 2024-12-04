@@ -119,6 +119,7 @@
     <button onclick="window.location.href='index.html'">Main Menu</button>
 
     <script>
+        const bgm = document.getElementById('bgm');
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const message = document.getElementById('message');
@@ -270,6 +271,10 @@
 
             if (checkWin(player)) {
                 message.textContent = player === player1 ? 'Player 1 (Kirby) Wins!' : 'Player 2 (Meta Knight) Wins!';
+                const bgm = document.getElementById('bgm');
+                bgm.src = 'bgm/win.mp3'; // Change to win music
+                bgm.play(); // Play the win music
+                bgm.loop = true;
                 window.removeEventListener('keydown', handleKeydown);
             } else {
                 drawPlayers();

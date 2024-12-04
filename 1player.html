@@ -29,7 +29,7 @@
         }
         canvas {
             border: 2px solid #FFF;
-            background-image: url('img/grass.png');
+            background-image: url('img/rockbg.gif');
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
@@ -70,7 +70,7 @@
             top: -50px;
             right: 10px;
             z-index: 10; /* Ensure it appears above other elements */
-            background-color: rgba(255, 255, 255, 0.8); /* Optional: translucent background */
+            background-color: #ffdb77; /* Optional: translucent background */
             border: 1px solid #ccc;
             padding: 10px;
             border-radius: 5px;
@@ -93,12 +93,99 @@
             position: absolute;
             top: -50px;
             left: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: #ffdb77;
             padding: 10px 20px;
             border-radius: 10px;
             font-size: 20px;
             z-index: 100; /* Ensures it is above other elements */
         }
+        /* Modal Styles */
+        #pauseModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #ffdb77;
+            padding: 50px;
+            width: 20%;
+            text-align: center;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically */
+            align-items: center;
+        }
+
+        .modal-content button {
+            width: 100%; /* Set a fixed width for each button */
+            margin: 10px;
+            font-size: 18px;
+            padding: 10px;
+        }
+
+        #pauseContent {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        #pauseContent button {
+            display: block;
+            margin: 10px;
+            font-size: 18px;
+            padding: 10px;
+        }
+
+        /* Modal Styles */
+        #winModal {
+            display: none;
+            padding: 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #winModal .modal-content {
+            background-color: #ffdb77;
+            width: 20%;
+            text-align: center;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #winModal .modal-content h2 {
+            font-size: 50px;
+        }
+
+        #winModal .modal-content p {
+            font-size: 40px;
+        }
+
+        #winModal .modal-content button {
+            width: 100%;
+            margin: 10px;
+            font-size: 18px;
+            padding: 10px;
+        }
+
+
     </style>
 </head>
 <body>
@@ -116,84 +203,159 @@
     </audio>
     
     <div id="controls-container">
-        <button id="resetButton">Restart Game</button>
-        <button onclick="window.location.href='index.html'">Main Menu</button>
-
-        <button id="nextLevelButton" style="display: none;">Next Level</button>
+        <button id="pauseButton">Pause</button>
+        <!-- <button id="nextLevelButton" style="display: none;">Next Level</button> -->
     <div>
 
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const message = document.getElementById('message');
-        const resetButton = document.getElementById('resetButton');
-        const nextLevelButton = document.getElementById('nextLevelButton');
-        message.textContent = 'Score: 0';
+    <!-- Modal for pause menu -->
+    <div id="pauseModal">
+        <div class="modal-content">
+            <h2>Game Paused</h2>
+            <button class="modal-button" onclick="resumeGame()">Resume</button>
+            <button class="modal-button" onclick="restartGame()">Restart Game</button>
+            <button class="modal-button" onclick="goToMainMenu()">Main Menu</button>
+        </div>
+    </div>
 
-        resetButton.addEventListener('click', function() {
+    <!-- Modal for win message -->
+    <div id="winModal">
+        <div class="modal-content">
+            <h2>You Win!</h2>
+            <p>Final Score: <span id="finalScore"></span></p>
+            <button class="modal-button" onclick="restartGame()">Restart Game</button>
+            <button class="modal-button" onclick="goToMainMenu()">Main Menu</button>
+        </div>
+    </div>
+
+
+
+    <script>
+        const bgm = document.getElementById('bgm');
+        const pauseButton = document.getElementById('pauseButton');
+        const pauseModal = document.getElementById('pauseModal');
+        // Show the modal when the pause button is clicked
+        pauseButton.addEventListener('click', function() {
+            pauseModal.style.display = 'flex';
+        });
+
+        // Function to resume the game
+        function resumeGame() {
+            pauseModal.style.display = 'none';
+        }
+
+        // Function to restart the game
+        function restartGame() {
             player1.x = 50;
             player1.y = 50;
             player1.score = 0;
             message.textContent = 'Score: ' + player1.score;
-            drawPlayers(); 
-            window.addEventListener('keydown', handleKeydown); 
-        });
+            drawPlayers();
+            pauseModal.style.display = 'none';
+        }
+
+        // Function to go to the main menu
+        function goToMainMenu() {
+            window.location.href = 'index.html';
+        }
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const message = document.getElementById('message');
+        // const nextLevelButton = document.getElementById('nextLevelButton');
+        message.textContent = 'Score: 0';
 
         const player1Image = new Image();
         player1Image.src = 'img/kirby.png';
 
-        nextLevelButton.addEventListener('click', function() {
+        // nextLevelButton.addEventListener('click', function() {
             // Reset for the next level
-            setupNextLevel();
-        });
+           // setupNextLevel();
+       // });
 
         const player1 = {
             x: 50,
             y: 50,
             width: 55,
             height: 50,
-            speed: 10,
+            speed: 20,
             score: 0
         };
 
+        // Function to restart the game
+        function restartGame() {
+            window.location.reload(); // Reload the page
+        }
+
+
         // Define walls array
         const walls = [
-            { x: 0, y: 0, width: 600, height: 1 },
-            { x: 0, y: 0, width: 1, height: 150 },
-            { x: 600, y: 0, width: 1, height: 150 },
-            { x: 0, y: 150, width: 250, height: 20 },
-            { x: 350, y: 150, width: 250, height: 20 },
-            { x: 250, y: 150, width: 20, height: 150 },
-            { x: 350, y: 150, width: 20, height: 150 },
-            { x: 350, y: 300, width: 180, height: 20 },
-            { x: 70, y: 300, width: 190, height: 20 },
-            { x: 150, y: 380, width: 300, height: 20 },
-            { x: 150, y: 390, width: 20, height: 250 },
-            { x: 70, y: 300, width: 20, height: 420 },
-            { x: 520, y: 300, width: 20, height: 420 },
-            { x: 440, y: 390, width: 20, height: 250 },
-            { x: 150, y: 640, width: 300, height: 20},
-            { x: 70, y: 720, width: 190, height: 20},
-            { x: 350, y: 720, width: 180, height: 20},
-            { x: 250, y: 720, width: 20, height: 90},
-            { x: 350, y: 720, width: 20, height: 90},
+            //Outside Borders
+            { x: 0, y: 0, width: 1680, height: 20 },
+            { x: 0, y: 0, width: 20, height: 800 },
+            { x: 1680, y: 0, width: 20, height: 800 },
+            { x: 0, y: 700, width: 1680, height: 100 },
+
+            //Inner Walls
+            { x: 10, y: 140, width: 160, height: 20 },
+            { x: 0, y: 140, width: 170, height: 160 },
+            { x: 280, y: 140, width: 320, height: 20 },
+            { x: 280, y: 140, width: 20, height: 160 },
+            { x: 600, y: 140, width: 20, height: 160 },
+            { x: 730, y: 20, width: 20, height: 400 },
+            { x: 280, y: 420, width: 580, height: 20 },
+            { x: 450, y: 290, width: 20, height: 150 },
+            { x: 150, y: 420, width: 20, height: 360 },
+            { x: 280, y: 420, width: 20, height: 160 },
+            { x: 280, y: 420, width: 190, height: 160 },
+            { x: 580, y: 560, width: 170, height: 160 },
+            { x: 860, y: 420, width: 20, height: 160 },
+            { x: 1000, y: 420, width: 20, height: 160 },
+            { x: 1180, y: 560, width: 500, height: 160 },
+            { x: 1000, y: 420, width: 380, height: 20 },
+            { x: 1380, y: 140, width: 20, height: 440 },
+            { x: 860, y: 280, width: 380, height: 20 },
+            { x: 860, y: 140, width: 20, height: 140 },
+            { x: 1050, y: 0, width: 190, height: 160 },
+            { x: 1220, y: 0, width: 20, height: 280 },
+            { x: 1540, y: 0, width: 140, height: 160 },
+            { x: 1400, y: 300, width: 140, height: 140 },
         ];
 
         const finishLine = {
-            x: 260,
-            y: 770,
-            width: 90,
-            height: 10,
+            x: 1430,
+            y: 460,
+            width: 80,
+            height: 80,
             color: '#FF6E6E'
         };
+        const finishLineKirby = new Image();
+        finishLineKirby.src = 'img/metaknight.png';
 
         let apples = [
-            { x: 100, y: 100, width: 30, height: 30, collected: false },
-            { x: 270, y: 200, width: 30, height: 30, collected: false },
-            { x: 90, y: 350, width: 30, height: 30, collected: false },
-            { x: 470, y: 400, width: 30, height: 30, collected: false },
-            { x: 200, y: 670, width: 30, height: 30, collected: false }
+            { x: 440, y: 60, width: 30, height: 30, collected: false },
+            { x: 360, y: 360, width: 30, height: 30, collected: false },
+            { x: 70, y: 640, width: 30, height: 30, collected: false },
+            { x: 520, y: 360, width: 30, height: 30, collected: false },
+            { x: 360, y: 640, width: 30, height: 30, collected: false },
+            { x: 800, y: 640, width: 30, height: 30, collected: false },
+            { x: 1310, y: 490, width: 30, height: 30, collected: false },
+            { x: 1150, y: 200, width: 30, height: 30, collected: false },
+            { x: 1300, y: 60, width: 30, height: 30, collected: false },
+            { x: 1600, y: 210, width: 30, height: 30, collected: false },
         ];
+
+        // Function to update apple positions for the floating effect
+        function animateApples() {
+            const time = performance.now() / 500; // Get time in seconds
+
+            for (const apple of apples) {
+                apple.yOffset = Math.sin(time + apple.x / 100) * 5; // Oscillate position
+            }
+
+            drawPlayers(); // Redraw all elements including apples
+            requestAnimationFrame(animateApples); // Continuously animate
+        }
+
 
         function animateSpawn(player, targetX, targetY) {
             const startX = player.x;
@@ -233,7 +395,7 @@
 
         // Load the rock texture image globally
         const rockTexture = new Image();
-        rockTexture.src = 'img/rock.jpg'; // Path to your texture image
+        rockTexture.src = 'img/rock.webp'; // Path to your texture image
 
         // Ensure the texture image is loaded before using it
         rockTexture.onload = () => {
@@ -264,18 +426,19 @@
 
 
         function drawFinishLine() {
-            ctx.fillStyle = finishLine.color;
-            ctx.fillRect(finishLine.x, finishLine.y, finishLine.width, finishLine.height);
-        }
+    // Draw the Kirby image at the finish line position instead of drawing a finish line rectangle
+    ctx.drawImage(finishLineKirby, finishLine.x, finishLine.y, finishLine.width, finishLine.height);
+}
 
         const appleImage = new Image();
         appleImage.src = 'img/apple.png';
 
 
+        // Updated drawApples function to include yOffset
         function drawApples() {
             for (const apple of apples) {
                 if (!apple.collected) {
-                    ctx.drawImage(appleImage, apple.x, apple.y, apple.width, apple.height);
+                    ctx.drawImage(appleImage, apple.x, apple.y + apple.yOffset, apple.width, apple.height);
                 }
             }
         }
@@ -317,23 +480,49 @@
             return false;
         }
 
+        // Function to show the win modal
+        function showWinModal() {
+            const winModal = document.getElementById('winModal');
+            const finalScore = document.getElementById('finalScore');
+            finalScore.textContent = player1.score; // Set the final score in the modal
+            winModal.style.display = 'flex'; // Show the win modal
+        }
+
         function checkWin(player) {
             // Check if all apples are collected
             const allApplesCollected = apples.every(apple => apple.collected);
 
             // Check if Kirby reaches the finish line and all apples are collected
-            if (allApplesCollected &&
-                player.x < finishLine.x + finishLine.width &&
+            if (player.x < finishLine.x + finishLine.width &&
                 player.x + player.width > finishLine.x &&
                 player.y < finishLine.y + finishLine.height &&
                 player.y + player.height > finishLine.y) {
-                message.textContent = 'Player 1 (Kirby) Wins! Final Score: ' + player.score;
+
+                // If not all apples are collected, reset the player to the starting position
+                if (!allApplesCollected) {
+                    animateSpawn(player, 50, 50);  // Reset position with animation
+                    message.textContent = 'You must collect all apples before reaching the finish line!';
+                    collideSound.play();
+                    return;  // Exit the function without completing the win condition
+                }
+
+                // If all apples are collected, proceed with the win
+                message.textContent = 'You Win! Final Score: ' + player.score;
+
+                // Disable player movement
                 window.removeEventListener('keydown', handleKeydown);
 
-                // Show the Next Level button
-                nextLevelButton.style.display = 'inline-block';
+                // Optionally play a win sound or change background music
+                const bgm = document.getElementById('bgm');
+                bgm.src = 'bgm/win.mp3'; // Change to win music
+                bgm.play(); // Play the win music
+                bgm.loop = true;
+
+                // Show the win modal
+                showWinModal();
             }
         }
+
 
         function movePlayer(player, newX, newY) {
             if (!checkCollision(newX, newY, player)) {
@@ -385,7 +574,7 @@
             }
         }
 
-        function setupNextLevel() {
+       /* function setupNextLevel() {
             // Reset player position and score if needed
             player1.x = 50;
             player1.y = 50;
@@ -413,10 +602,10 @@
             // Update the canvas with the new level
             drawPlayers();
             window.addEventListener('keydown', handleKeydown); // Re-enable movement
-        }
+        }*/
 
-        window.addEventListener('keydown', handleKeydown);
-        drawPlayers(); 
+        drawPlayers();
+        animateApples();
     </script>
 </body>
 </html>
